@@ -72,8 +72,12 @@
     self.context[@"alert"] =
     ^(NSString *str)
     {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"msg from js" message:str delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil, nil];
-        [alert show];
+        //要把改变视图的操作放到主线程中，否则就会抛出异常，对以后的操作会有问题
+        [[NSOperationQueue mainQueue]addOperationWithBlock:^{
+            
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:str delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+        }];
     };
     
     __block typeof(self) weakSelf = self;
